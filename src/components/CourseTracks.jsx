@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Code, Brain, Database, Rocket } from 'lucide-react';
+import anime from 'animejs';
 
 const tracks = [
   {
@@ -75,8 +76,23 @@ const TrackCard = ({ track }) => {
 };
 
 const CourseTracks = () => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    anime({
+      targets: el.querySelectorAll('[data-track]'),
+      opacity: [0, 1],
+      translateY: [18, 0],
+      duration: 600,
+      delay: anime.stagger(120),
+      easing: 'easeOutQuad',
+    });
+  }, []);
+
   return (
-    <section id="tracks" className="relative mx-auto max-w-6xl px-6 py-16">
+    <section ref={sectionRef} id="tracks" className="relative mx-auto max-w-6xl px-6 py-16">
       <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <h2 className="text-3xl font-bold text-white sm:text-4xl">Rutas de aprendizaje</h2>
@@ -88,7 +104,9 @@ const CourseTracks = () => {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {tracks.map((track) => (
-          <TrackCard key={track.id} track={track} />
+          <div key={track.id} data-track>
+            <TrackCard track={track} />
+          </div>
         ))}
       </div>
     </section>

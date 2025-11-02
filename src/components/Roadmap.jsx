@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Code, Database, Rocket, Brain } from 'lucide-react';
+import anime from 'animejs';
 
 const steps = [
   {
@@ -29,8 +30,23 @@ const steps = [
 ];
 
 const Roadmap = () => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    anime({
+      targets: el.querySelectorAll('[data-step]'),
+      opacity: [0, 1],
+      translateX: [-16, 0],
+      duration: 650,
+      delay: anime.stagger(140),
+      easing: 'easeOutQuad',
+    });
+  }, []);
+
   return (
-    <section id="roadmap" className="relative mx-auto max-w-6xl px-6 py-16">
+    <section ref={sectionRef} id="roadmap" className="relative mx-auto max-w-6xl px-6 py-16">
       <div className="mb-10 text-center">
         <h2 className="text-3xl font-bold text-white sm:text-4xl">Tu recorrido de 0 a IA</h2>
         <p className="mt-2 text-white/70">Un camino claro, práctico y motivador para avanzar sin perderte.</p>
@@ -42,6 +58,7 @@ const Roadmap = () => {
           return (
             <div
               key={step.title}
+              data-step
               className="relative rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur sm:p-8"
             >
               <div className="mb-3 inline-flex items-center gap-3">

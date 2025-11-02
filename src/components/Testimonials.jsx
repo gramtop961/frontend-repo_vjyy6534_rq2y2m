@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Star, Users } from 'lucide-react';
+import anime from 'animejs';
 
 const testimonials = [
   {
@@ -23,8 +24,23 @@ const testimonials = [
 ];
 
 const Testimonials = () => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    anime({
+      targets: el.querySelectorAll('[data-testi]'),
+      opacity: [0, 1],
+      scale: [0.96, 1],
+      duration: 600,
+      delay: anime.stagger(120),
+      easing: 'easeOutCubic',
+    });
+  }, []);
+
   return (
-    <section className="relative mx-auto max-w-6xl px-6 py-16">
+    <section ref={sectionRef} className="relative mx-auto max-w-6xl px-6 py-16">
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold text-white sm:text-4xl">Historias de la comunidad</h2>
@@ -38,7 +54,7 @@ const Testimonials = () => {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {testimonials.map((t) => (
-          <div key={t.name} className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur">
+          <div key={t.name} data-testi className="rounded-2xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur">
             <div className="mb-3 flex items-center gap-1 text-amber-400">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star key={i} className="h-4 w-4 fill-current" />
